@@ -1,0 +1,74 @@
+﻿@inject IAuthorizationService authorization;
+
+@model IEnumerable<ApplicationUser>;
+
+@{
+    ViewBag.Title = "All Users";
+}
+
+<h1>All Users</h1>
+
+@if (Model.Any())
+{
+    bool isCreatePolicy = (await authorization.AuthorizeAsync(User, Model, "CreatePolicy")).Succeeded;
+    bool isEditPolicy = (await authorization.AuthorizeAsync(User, Model, "EditPolicy")).Succeeded;
+    bool isDeletePolicy = (await authorization.AuthorizeAsync(User, Model, "DeletePolicy")).Succeeded;
+
+    if (isCreatePolicy)
+    {
+        <a asp-controller="account" asp-action="register" class="btn btn-primary mb-3">Add new user</a>
+    }
+
+    foreach (ApplicationUser user in Model)
+    {
+        <div class="card mb-3">
+            <div class="card-header">
+                User ID: @user.Id
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">@user.UserName</h5>
+                @if (user.City != null)
+                {
+                    <h6>@user.City</h6>
+                }
+            </div>
+            @if (isEditPolicy || isDeletePolicy)
+            {
+                <div class="card-footer">
+                    <form asp-controller="administration" asp-action="deleteuser" asp-route-id="@user.Id" method="post">
+                        @if (isEditPolicy)
+                        {
+                            <a asp-controller="administration" asp-action="edituser" asp-route-id="@user.Id" class="btn btn-primary">Edit</a>
+                        }
+
+                        @if (isDeletePolicy)
+                        {
+                            <span class="delete" id="delete_@user.Id">
+                                <a href="#" class="btn btn-danger" onclick="toggleDeleteConfirmation('@user.Id')">Delete</a>
+                            </span>
+                            <span id="confirmdelete_@user.Id" style="display: none;">
+                                <span>Are you sure you want to delete user @user.UserName?</span>
+                                <button type="submit" class="btn btn-danger">Yes</button>
+                                <a href="#" class="btn btn-primary" onclick="toggleDeleteConfirmation('@user.Id')">No</a>
+                            </span>
+                        }
+                    </form>
+                </div>
+            }
+        </div>
+    }
+}
+else
+{
+    <div class="card">
+        <div class="card-header">No users created yet</div>
+        <div class="card-body">
+            <h5 class="card-title">Use the button below to create a new user.</h5>
+            <a asp-controller="account" asp-action="register" class="btn btn-primary">Add new user</a>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script src="~/js/CustomScript.js"></script>
+}

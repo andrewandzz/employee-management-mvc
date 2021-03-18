@@ -1,0 +1,15 @@
+﻿@model ExceptionDetailsViewModel;
+
+@{
+    ViewBag.Title = "Error";
+}
+
+@if (Model == null)
+{
+    <h3>Sorry, an error occured while processing your request. We are already working on its troubleshooting.</h3>
+}
+else
+{
+    <h1 class="text-danger">@Model.Title</h1>
+    <h4 class="text-danger">@Model.Message</h4>
+}

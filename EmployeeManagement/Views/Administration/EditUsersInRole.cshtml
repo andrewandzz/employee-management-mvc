@@ -1,0 +1,30 @@
+﻿@model EditUsersInRoleViewModel;
+
+@{
+    ViewBag.Title = "Edit Users in Role";
+}
+
+<h1>Edit Users in Role</h1>
+
+<form method="post">
+    <div class="card">
+        <div class="card-header">
+            <h3>Add or remove users within this role</h3>
+        </div>
+        <div class="card-body">
+            @for (int i = 0; i < Model.Users.Count; i++)
+            {
+                <input asp-for="@Model.Users[i].Id" hidden />
+                <input asp-for="@Model.Users[i].Name" hidden />
+                <div class="form-check">
+                    <input asp-for="@Model.Users[i].IsRoleSelected" class="form-check-input" />
+                    <label asp-for="@Model.Users[i].IsRoleSelected" class="form-check-label">@Model.Users[i].Name</label>
+                </div>
+            }
+        </div>
+        <div class="card-footer">
+            <button type="submit" class="btn btn-primary">Update</button>
+            <a asp-controller="administration" asp-action="editrole" asp-route-id="@Model.RoleId" class="btn btn-primary">Cancel</a>
+        </div>
+    </div>
+</form>

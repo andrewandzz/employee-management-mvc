@@ -1,0 +1,16 @@
+﻿.user-card {
+    min-width: 18rem;
+    max-width: 30.5%;
+}
+
+.user-card-image {
+    height: 200px;
+    display: flex;
+    justify-content: center;
+}
+
+.user-card-image img {
+    display: block;
+    height: 100%;
+    width: auto;
+}
